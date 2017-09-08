@@ -44,6 +44,8 @@ bool Weapon::setFromFile(string fileName){
 	cout << minDamage << endl;
 	*/
 
+	file.close();
+
 	return true;
 
 }
@@ -72,5 +74,22 @@ bool Weapon::saveToFile(string fileName) {
 	file << magazineSize << endl;
 	file << totalAmmo << endl;
 
+	file.close();
+
 	return true;
+}
+
+float Weapon::calcDamageAtRange(int range) {
+
+
+	float damage;
+
+	if (range > maxDamageRange) {
+
+		damage = maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage);
+
+		return damage;
+	}
+
+	else return maxDamage;
 }

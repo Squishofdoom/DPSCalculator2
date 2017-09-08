@@ -27,6 +27,10 @@ int magazineSize;
 int totalAmmo;
 
 public:
+
+	//Calculations
+	float calcDamageAtRange(int);
+
 	//File operations
 	bool setFromFile(string);	//accepts file name as input, file name should be weapon name
 	bool saveToFile(string);	//accepts file name as input, file name should be weapon name

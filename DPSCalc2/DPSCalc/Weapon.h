@@ -28,7 +28,7 @@ int totalAmmo;
 public:
 
 	//Mutators
-
+	void setFromFile(string);	//accepts file name as input, file name should be weapon name
 
 	//Accessors
 

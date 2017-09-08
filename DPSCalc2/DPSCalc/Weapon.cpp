@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void Weapon::setFromFile(string fileName){
+bool Weapon::setFromFile(string fileName){
 
 	ifstream file;	//input file
 	string temp;	//temp variable to store input data before output, for debugging purposes
@@ -25,6 +25,7 @@ void Weapon::setFromFile(string fileName){
 	*/
 
 	file >> weaponType;
+	file >> weaponName;
 	file >> fireRate;
 	file >> velocity;
 	file >> headshotMultiplier;
@@ -43,4 +44,33 @@ void Weapon::setFromFile(string fileName){
 	cout << minDamage << endl;
 	*/
 
+	return true;
+
+}
+
+bool Weapon::saveToFile(string fileName) {
+
+	ofstream file;
+
+	fileName = "Data/" + fileName;
+
+	file.open(fileName);
+
+
+	file << weaponType << endl;
+	file << weaponName << endl;
+	file << fireRate << endl;
+	file << velocity << endl;
+	file << headshotMultiplier << endl;
+	file << moveSpeedMultiplier << endl;
+	file << maxDamage << endl;
+	file << maxDamageRange << endl;
+	file << minDamage << endl;
+	file << minDamageRange << endl;
+	file << shortReload << endl;
+	file << longReload << endl;
+	file << magazineSize << endl;
+	file << totalAmmo << endl;
+
+	return true;
 }

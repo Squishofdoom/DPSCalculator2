@@ -6,6 +6,7 @@ class Weapon {
 private:
 
 string weaponType;
+string weaponName;
 
 int fireRate;
 int velocity;
@@ -26,9 +27,12 @@ int magazineSize;
 int totalAmmo;
 
 public:
+	//File operations
+	bool setFromFile(string);	//accepts file name as input, file name should be weapon name
+	bool saveToFile(string);	//accepts file name as input, file name should be weapon name
 
 	//Mutators
-	void setFromFile(string);	//accepts file name as input, file name should be weapon name
+	
 
 	//Accessors
 

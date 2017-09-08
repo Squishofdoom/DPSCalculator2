@@ -1,17 +1,31 @@
-#include <string>
 #include <fstream>
-#include <iostream>
 
-#include "Weapon.h"
+#include "Explosive.h"
 
-using namespace std;
+float Explosive::calcSplashDamage(int range) {
 
-bool Weapon::setFromFile(string fileName){
+	float damage;
+
+	if (range >= maxSplashRange && range <= minSplashRange) {
+
+		damage = maxSplashDamage - (range - maxSplashRange) / (minSplashRange - maxSplashRange) * (maxSplashDamage - minSplashDamage);
+
+		return damage;
+	}
+	else if (range < minSplashRange) {
+
+		return 0;
+	}
+
+	else return maxSplashDamage;
+}
+
+bool Explosive::setFromFile(string fileName) {
 
 	ifstream file;	//input file
 	string temp;	//temp variable to store input data before output, for debugging purposes
 
-	//appends the data folder to the name of the file, so it accesses the right place
+					//appends the data folder to the name of the file, so it accesses the right place
 	fileName = "Data/" + fileName;
 
 	file.open(fileName);
@@ -20,7 +34,7 @@ bool Weapon::setFromFile(string fileName){
 
 	while (file >> temp) {
 
-		cout << temp << endl;
+	cout << temp << endl;
 	}
 	*/
 
@@ -38,6 +52,10 @@ bool Weapon::setFromFile(string fileName){
 	file >> longReload;
 	file >> magazineSize;
 	file >> totalAmmo;
+	file >> maxSplashDamage;
+	file >> maxSplashRange;
+	file >> minSplashDamage;
+	file >> minSplashRange;
 
 	/*Debug console outputs
 	cout << maxDamage << endl;
@@ -50,7 +68,7 @@ bool Weapon::setFromFile(string fileName){
 
 }
 
-bool Weapon::saveToFile(string fileName) {
+bool Explosive::saveToFile(string fileName) {
 
 	ofstream file;
 
@@ -72,23 +90,12 @@ bool Weapon::saveToFile(string fileName) {
 	file << longReload << endl;
 	file << magazineSize << endl;
 	file << totalAmmo << endl;
+	file << maxSplashDamage << endl;
+	file << maxSplashRange << endl;
+	file << minSplashDamage << endl;
+	file << minSplashRange << endl;
 
 	file.close();
 
 	return true;
-}
-
-float Weapon::calcDamageAtRange(int range) {
-
-
-	float damage;
-
-	if (range > maxDamageRange) {
-
-		damage = maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage);
-
-		return damage;
-	}
-
-	else return maxDamage;
 }

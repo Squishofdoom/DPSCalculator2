@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Weapon.h"
+#include "Explosive.h"
 
 int main() {
 
@@ -16,4 +17,8 @@ int main() {
 	damage = weapon.calcDamageAtRange(range);
 
 	cout << damage << endl;
+
+	Explosive rocket;
+
+	
 }

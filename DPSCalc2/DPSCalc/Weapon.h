@@ -1,9 +1,12 @@
+#ifndef WEAPON_H
+#define WEAPON_H
+
 #include <string>
 using namespace std;
 
 class Weapon {
 
-private:
+protected:
 
 string weaponType;
 string weaponName;
@@ -41,3 +44,5 @@ public:
 	//Accessors
 
 };
+
+#endif

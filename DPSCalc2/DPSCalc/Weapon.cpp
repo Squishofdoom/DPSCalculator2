@@ -78,8 +78,11 @@ bool Weapon::saveToFile(string fileName) {
 	return true;
 }
 
-float Weapon::calcDamageAtRange(int range) {
+void Weapon::calculate(int range, float accuracy) {
 
+	//
+	//Calculates damage at range, then calls sub-functions to do other minor calculations
+	//
 
 	float damage;
 
@@ -87,8 +90,77 @@ float Weapon::calcDamageAtRange(int range) {
 
 		damage = maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage);
 
-		return damage;
+		damageAtRange = damage;
 	}
 
-	else return maxDamage;
+	else damageAtRange = maxDamage;
+
+
+	//
+	//Begin calculating other numbers using sub-functions.
+	//
+
+	calcIdealDPS();
+	calcDPS(accuracy);
+	calcTTK();
+
 }
+
+void Weapon::calcIdealDPS() {
+	float fireRatePerSecond = fireRate / 60;
+	idealDPS = damageAtRange * fireRatePerSecond;
+}
+
+void Weapon::calcDPS(float accuracy) {
+
+	accuracy = accuracy / 100;
+
+	DPS = idealDPS * accuracy;
+ }
+
+void Weapon::calcTTK() {
+
+	float nanoweaveDPS = DPS - (DPS * .20);
+
+	TTK = 1000 / DPS;
+	nanoweaveTTK = 1000 / nanoweaveDPS;
+}
+
+void Weapon::display() {
+
+	int accuracy;
+	int range;
+
+	cout << "Please input average accuracy, in percentage." << endl;
+	cin >> accuracy;
+
+	cout << "Please input range from target, in meters." << endl;
+	cin >> range;
+
+	calculate(range, accuracy);
+
+	cout << "Damage to target at " << range << " meters is " << damageAtRange << endl;
+	cout << "Ideal DPS is " << idealDPS << " DPS" << endl;
+	cout << "Actual DPS, accounting for accuracy, is " << DPS << endl;
+	cout << "Time To Kill: " << TTK << " seconds." << endl;
+	cout << "TTK against Nanoweave: " << nanoweaveTTK << " seconds." << endl;
+}
+
+/////////////////////
+//MUTATOR FUNCTIONS//
+/////////////////////
+
+void Weapon::setWeaponType(string input) { weaponType = input; }
+void Weapon::setWeaponName(string input){	weaponName = input;}
+void Weapon::setFireRate(int input){fireRate = input;}
+void Weapon::setVelocity(int input){velocity = input;}
+void Weapon::setHeadShotMultiplier(float input){headshotMultiplier = input;}
+void Weapon::setMoveSpeedMultiplier(float input){moveSpeedMultiplier = input;}
+void Weapon::setMaxDamage(int input){maxDamage = input;}
+void Weapon::setMaxRange(int input){maxDamageRange = input;}
+void Weapon::setMinDamage(int input){minDamage = input;}
+void Weapon::setMinRange(int input){minDamageRange = input;}
+void Weapon::setShortReload(float input){shortReload = input;}
+void Weapon::setLongReload(float input){longReload = input;}
+void Weapon::setMagazineSize(int input){magazineSize = input;}
+void Weapon::setTotalAmmo(int input){totalAmmo = input;}

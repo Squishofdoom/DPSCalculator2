@@ -7,18 +7,14 @@
 int main() {
 
 	Weapon weapon;
+	string junk;
 
 	weapon.setFromFile("debug.txt");
 	weapon.saveToFile("debug2.txt");
 
-	int range = 12;
-	float damage;
+	weapon.display();
 
-	damage = weapon.calcDamageAtRange(range);
+	system("pause");
 
-	cout << damage << endl;
-
-	Explosive rocket;
-
-	
+	return 0;
 }

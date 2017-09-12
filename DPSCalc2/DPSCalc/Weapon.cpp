@@ -164,3 +164,22 @@ void Weapon::setShortReload(float input){shortReload = input;}
 void Weapon::setLongReload(float input){longReload = input;}
 void Weapon::setMagazineSize(int input){magazineSize = input;}
 void Weapon::setTotalAmmo(int input){totalAmmo = input;}
+
+//////////////////////
+//ACCESSOR FUNCTIONS//
+//////////////////////
+
+string Weapon::getWeaponType() { return weaponType; }
+string Weapon::getWeaponName() { return weaponName ; }
+int Weapon::getFireRate() { return fireRate ; }
+int Weapon::getVelocity() { return velocity ; }
+float Weapon::getHeadShotMultiplier() { return headshotMultiplier ; }
+float Weapon::getMoveSpeedMultiplier() { return moveSpeedMultiplier ; }
+int Weapon::getMaxDamage() { return maxDamage ; }
+int Weapon::getMaxRange() { return maxDamageRange ; }
+int Weapon::getMinDamage() { return minDamage ; }
+int Weapon::getMinRange() { return minDamageRange ; }
+float Weapon::getShortReload() { return shortReload ; }
+float Weapon::getLongReload() { return longReload ; }
+int Weapon::getMagazineSize() { return magazineSize ; }
+int Weapon::getTotalAmmo() { return totalAmmo ; }

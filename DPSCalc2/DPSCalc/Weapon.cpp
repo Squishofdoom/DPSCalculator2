@@ -25,7 +25,8 @@ bool Weapon::setFromFile(string fileName){
 	*/
 
 	file >> weaponType;
-	file >> weaponName;
+	cin.ignore();
+	getline(file, weaponName);
 	file >> fireRate;
 	file >> velocity;
 	file >> headshotMultiplier;

@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <istream>
 
 #include "Weapon.h"
 
@@ -25,8 +26,8 @@ bool Weapon::setFromFile(string fileName){
 	*/
 
 	file >> weaponType;
-	cin.ignore();
-	getline(file, weaponName);
+	getline(file, temp);//eats the end-of-line from the previous cin
+	getline(file, weaponName);//gets the actual line once the end-of-line has been taken
 	file >> fireRate;
 	file >> velocity;
 	file >> headshotMultiplier;
@@ -89,7 +90,7 @@ void Weapon::calculate(int range, float accuracy) {
 
 	if (range > maxDamageRange) {
 
-		damage = maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage);
+		damage = (maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage));
 
 		damageAtRange = damage;
 	}
@@ -184,3 +185,52 @@ float Weapon::getShortReload() { return shortReload ; }
 float Weapon::getLongReload() { return longReload ; }
 int Weapon::getMagazineSize() { return magazineSize ; }
 int Weapon::getTotalAmmo() { return totalAmmo ; }
+
+///////////////////////
+//VALIDATOR FUNCTIONS//
+///////////////////////
+
+bool Weapon::check(string input) {
+
+
+	
+		if (input == "" || input == " ") {
+			cout << "That input is incorrect. Please try again." << endl;
+			return false;
+		}
+		else{
+
+			return true;
+		}
+	
+}
+
+bool Weapon::check(int input) {
+
+
+
+	if (input <= 0) {
+		cout << "That input is incorrect. Please try again." << endl;
+		return false;
+	}
+	else {
+
+		return true;
+	}
+
+}
+
+bool Weapon::check(float input) {
+
+
+
+	if (input <= 0) {
+		cout << "That input is incorrect. Please try again." << endl;
+		return false;
+	}
+	else {
+
+		return true;
+	}
+
+}

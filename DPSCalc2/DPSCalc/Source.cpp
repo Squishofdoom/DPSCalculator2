@@ -70,45 +70,203 @@ void import() {
 void manualInput() {
 
 	string weaponName;
-	string temp;
-	int temp2;
-	float temp3;
+	string temp;//storage string
+	int temp2;//storage int
+	float temp3;//storage float
 
 	cin.ignore();
 
 	cout << "Please input the following data: " << endl;
-	cout << "Weapon name: "; getline(cin, weaponName); weapon.setWeaponName(weaponName); cout << endl;
 
-	cout << "Fire rate (per minute): "; cin >> temp2; weapon.setFireRate(temp2); cout << endl;
+	//weapon name
+	bool val = false;
+	do {
+		cout << "Weapon name: ";
+		getline(cin, weaponName);
+		cout << endl;
 
-	cout << "Velocity: "; cin >> temp2; weapon.setVelocity(temp2); cout << endl;
+		val = weapon.check(weaponName);
+	} while (val == false);
 
-	cout << "Headshot multiplier: "; cin >> temp3; weapon.setHeadShotMultiplier(temp3); cout << endl;
+	weapon.setWeaponName(weaponName);
 
-	cout << "Move speed multiplier: "; cin >> temp3; weapon.setMoveSpeedMultiplier(temp3); cout << endl;
+	//fire rate
+	val = false;
+	do {
+		cout << "Fire rate (per minute): ";
+		cin >> temp2;
+		cout << endl;
 
-	cout << "Max damage: "; cin >> temp2; weapon.setMaxDamage(temp2); cout << endl;
+		val = weapon.check(temp2);
 
-	cout << "Minimum falloff range: "; cin >> temp2; weapon.setMaxRange(temp2); cout << endl;
+	} while (val == false);
 
-	cout << "Minimum damage: "; cin >> temp2; weapon.setMinDamage(temp2); cout << endl;
+	weapon.setFireRate(temp2);
 
-	cout << "Maximum falloff range: "; cin >> temp2; weapon.setMinRange(temp2); cout << endl;
+	//velocity
+	val = false;
+	do {
+		cout << "Velocity in Meters Per Second: ";
+		cin >> temp2;
+		cout << endl;
 
-	cout << "Short reload time: "; cin >> temp3; weapon.setShortReload(temp3); cout << endl;
+		val = weapon.check(temp2);
 
-	cout << "Long reload time: "; cin >> temp3; weapon.setLongReload(temp3); cout << endl;
+	} while (val == false);
 
-	cout << "Magazine size: "; cin >> temp2; weapon.setMagazineSize(temp2); cout << endl;
+	weapon.setVelocity(temp2);
 
-	cout << "Total reserve ammo: "; cin >> temp2; weapon.setTotalAmmo(temp2); cout << endl;
+	//headshot damage
+	val = false;
+	do {
+		cout << "Headshot damage multiplier: ";
+		cin >> temp3;
+		cout << endl;
 
-	weapon.setWeaponType("Infantry");
+		val = weapon.check(temp3);
 
+	} while (val == false);
+
+	weapon.setVelocity(temp3);
+
+	//movespeed multiplier
+	val = false;
+	do {
+		cout << "Move speed multiplier while scoped: ";
+		cin >> temp3;
+		cout << endl;
+
+		val = weapon.check(temp3);
+
+	} while (val == false);
+
+	weapon.setMoveSpeedMultiplier(temp3);
+
+	//maximum damage
+	val = false;
+	do {
+		cout << "Maximum damage: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setMaxDamage(temp2);
+	
+	//falloff start range
+	val = false;
+	do {
+		cout << "Falloff start range: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setMaxRange(temp2);
+
+	//minimum damage
+	val = false;
+	do {
+		cout << "Minimum damage: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setMinDamage(temp2);
+
+	//end falloff range
+	val = false;
+	do {
+		cout << "Falloff end range: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setMinRange(temp2);
+
+	//short reload time
+	val = false;
+	do {
+		cout << "Short(partial) reload time: ";
+		cin >> temp3;
+		cout << endl;
+
+		val = weapon.check(temp3);
+
+	} while (val == false);
+
+	weapon.setShortReload(temp3);
+
+	//long reload time
+	val = false;
+	do {
+		cout << "Long(full) reload time: ";
+		cin >> temp3;
+		cout << endl;
+
+		val = weapon.check(temp3);
+
+	} while (val == false);
+
+	weapon.setLongReload(temp3);
+
+	//magazine size:
+	val = false;
+	do {
+		cout << "Magazine size: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setMagazineSize(temp2);
+
+	//reserve ammo
+	val = false;
+	do {
+		cout << "Total ammo, NOT including currently loaded: ";
+		cin >> temp2;
+		cout << endl;
+
+		val = weapon.check(temp2);
+
+	} while (val == false);
+
+	weapon.setTotalAmmo(temp2);
+
+
+		cout << "Weapon type(\"infantry\" for infantry and non-planetside weapons: ";
+		cin >> temp;
+		cout << endl;
+
+		if (temp == "infantry" || "Infantry") {
+
+			weapon.setWeaponType("Infantry");
+		}
+
+		else {
+
+			weapon.setWeaponType(temp);
+
+		}
+
+	//append .txt to the end of weapon name, to it can be fed to the save to file as the filename, then saves it to file
 	weaponName = weaponName.append(".txt");
-
 	weapon.saveToFile(weaponName);
 
+	//display weapon statistics
 	weapon.display();
 
 }

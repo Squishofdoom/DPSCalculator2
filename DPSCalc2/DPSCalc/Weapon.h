@@ -91,6 +91,11 @@ public:
 	float getLongReload();
 	int getMagazineSize();
 	int getTotalAmmo();
+
+	//validators
+	bool check(string);
+	bool check(int);
+	bool check(float);
 };
 
 #endif

@@ -40,6 +40,14 @@ bool Weapon::setFromFile(string fileName){
 	file >> longReload;
 	file >> magazineSize;
 	file >> totalAmmo;
+	file >> maxSplashDamage;
+	file >> maxSplashRange;
+	file >> minSplashDamage;
+	file >> minSplashRange;
+
+	if (maxSplashDamage > 0) {
+		isExplosive = true;
+	}
 
 	/*Debug console outputs
 	cout << maxDamage << endl;
@@ -74,13 +82,17 @@ bool Weapon::saveToFile(string fileName) {
 	file << longReload << endl;
 	file << magazineSize << endl;
 	file << totalAmmo << endl;
+	file << maxSplashDamage << endl;
+	file << maxSplashRange << endl;
+	file << minSplashDamage << endl;
+	file << minSplashRange << endl;
 
 	file.close();
 
 	return true;
 }
 
-void Weapon::calculate(int range, float accuracy) {
+void Weapon::calculate(int range, float accuracy, float headshots) {
 
 	//
 	//Calculates damage at range, then calls sub-functions to do other minor calculations
@@ -88,14 +100,15 @@ void Weapon::calculate(int range, float accuracy) {
 
 	float damage;
 
-	if (range > maxDamageRange) {
+	if (range > maxDamageRange && range < minDamageRange) {
 
-		damage = (maxDamage - (range - maxDamageRange) / (minDamageRange - maxDamageRange) * (maxDamage - minDamage));
+		damage = (maxDamage - ((range - maxDamageRange) / (minDamageRange - maxDamageRange)) * (maxDamage - minDamage));
 
 		damageAtRange = damage;
 	}
 
-	else damageAtRange = maxDamage;
+	else if (range < maxDamageRange) { damageAtRange = maxDamage; }
+	else { damageAtRange = minDamage; }
 
 
 	//
@@ -103,7 +116,7 @@ void Weapon::calculate(int range, float accuracy) {
 	//
 
 	calcIdealDPS();
-	calcDPS(accuracy);
+	calcDPS(accuracy, headshots);
 	calcTTK();
 
 }
@@ -113,11 +126,20 @@ void Weapon::calcIdealDPS() {
 	idealDPS = damageAtRange * fireRatePerSecond;
 }
 
-void Weapon::calcDPS(float accuracy) {
+void Weapon::calcDPS(float accuracy, float headshots) {
 
-	accuracy = accuracy / 100;
+	accuracy /= 100;
+	headshots /= 100;
 
-	DPS = idealDPS * accuracy;
+	float headShotDamage;
+	int headShotRate;
+	float fireRatePerSecond = fireRate / 60;
+
+	headShotDamage = damageAtRange * headshotMultiplier;
+	headShotRate = fireRatePerSecond * headshots;
+	headShotRate *= (headShotDamage - damageAtRange);
+	
+	DPS = (idealDPS + headShotRate) * accuracy;
  }
 
 void Weapon::calcTTK() {
@@ -128,29 +150,105 @@ void Weapon::calcTTK() {
 	nanoweaveTTK = 1000 / nanoweaveDPS;
 }
 
+void Weapon::calcSplash(float miss) {
+
+
+	
+
+	float splash;
+
+	if (miss > maxSplashRange && miss < minSplashRange) {
+
+		splash = (maxSplashDamage - ((miss - maxSplashRange) / (minSplashRange - maxSplashRange)) * (maxSplashDamage - minSplashDamage));
+
+		splashDamage = splash;
+	}
+
+	else if (miss < maxDamageRange) { splashDamage = maxSplashDamage; }
+	else { splashDamage = 0; }
+}
+
 void Weapon::display() {
 
+	string input;
 	int accuracy;
 	int range;
+	float headshots;
+	float miss;
 
+	cout << "Input Y if you would like to view the base weapon statistics, or N if you would only like to view calculated statistics." << endl;
+	cin >> input;
+
+	if (input == "y" || input == "Y") {
+
+		displayMore();
+	}
+
+	if (isExplosive) {
+
+		cout << "How far from your target did your weapon hit? 0 for direct hit: ";
+		cin >> miss;
+		cout << endl;
+	}
+	
 	cout << "Please input average accuracy, in percentage." << endl;
 	cin >> accuracy;
 
 	cout << "Please input range from target, in meters." << endl;
 	cin >> range;
 
-	calculate(range, accuracy);
+	cout << "Please input headshot rate, in percentage: ";
+	cin >> headshots; cout << endl;
+
+	calculate(range, accuracy, headshots);
+	calcSplash(miss);
 
 	cout << "Damage to target at " << range << " meters is " << damageAtRange << endl;
 	cout << "Ideal DPS is " << idealDPS << " DPS" << endl;
-	cout << "Actual DPS, accounting for accuracy, is " << DPS << endl;
+	cout << "Actual DPS, accounting for accuracy, and headshots, is " << DPS << endl;
 	cout << "Time To Kill: " << TTK << " seconds." << endl;
 	cout << "TTK against Nanoweave: " << nanoweaveTTK << " seconds." << endl;
+	if (isExplosive) {
+		cout << "Splash damage dealt: " << splashDamage << ", " << miss << " meters from the target." << endl;
+	}
+}
+
+void Weapon::displayMore() {
+
+	cout << "Weapon name: " << weaponName << endl;
+	cout << "Damage type: " << weaponType << endl;
+	cout << "Fire rate: " << fireRate << " rounds per minute" << endl;
+	cout << "Muzzle velocity: " << velocity << " m/s" << endl;
+	cout << "Headshot multiplier: " << headshotMultiplier << "x" << endl;
+	cout << "Sighted movement speed multiplier: " << moveSpeedMultiplier << "x" << endl;
+	cout << "Maximum damage: " << maxDamage << endl;
+	cout << "Falloff start range: " << maxDamageRange << "m" << endl;
+	cout << "Minimum damage: " << minDamage << endl;
+	cout << "Falloff end range: " << minDamageRange << "m" << endl;
+	cout << "Partial reload: " << shortReload << "s" << endl;
+	cout << "Full reload: " << longReload << "s" << endl;
+	cout << "Magazine size: " << magazineSize << endl;
+	cout << "Total ammo: " << totalAmmo << endl;
+
+	if (isExplosive) {
+
+		cout << "Maximum splash damage: " << maxSplashDamage << endl;
+		cout << "Splash falloff start range: " << maxSplashRange << "m" << endl;
+		cout << "Minimum splash damage: " << minSplashDamage << endl;
+		cout << "Splash falloff end range: " << minSplashRange << "m" << endl;
+
+	}
 }
 
 /////////////////////
 //MUTATOR FUNCTIONS//
 /////////////////////
+
+void Weapon::setExplosive(bool input) { isExplosive = input; }
+void Weapon::setMaxSplashDamage(float input) { maxSplashDamage = input; }
+void Weapon::setMaxSplashRange(float input) { maxSplashRange = input; }
+void Weapon::setMinSplashDamage(float input) { minSplashDamage = input; }
+void Weapon::setMinSplashRange(float input) { minSplashRange = input; }
 
 void Weapon::setWeaponType(string input) { weaponType = input; }
 void Weapon::setWeaponName(string input){	weaponName = input;}
@@ -170,6 +268,12 @@ void Weapon::setTotalAmmo(int input){totalAmmo = input;}
 //////////////////////
 //ACCESSOR FUNCTIONS//
 //////////////////////
+
+bool Weapon::getExplosive() { return isExplosive; }
+float Weapon::getMaxSplashDamage() { return maxSplashDamage; }
+float Weapon::getMinSplashDamage() { return minSplashDamage; }
+float Weapon::getMaxSplashRange() { return maxSplashRange; }
+float Weapon::getMinSplashRange() { return minSplashRange; }
 
 string Weapon::getWeaponType() { return weaponType; }
 string Weapon::getWeaponName() { return weaponName ; }

@@ -19,11 +19,11 @@ int velocity;
 float headshotMultiplier;
 float moveSpeedMultiplier;
 
-int maxDamage;
-int maxDamageRange;
+float maxDamage;
+float maxDamageRange;
 
-int minDamage;
-int minDamageRange;
+float minDamage;
+float minDamageRange;
 
 float shortReload;
 float longReload;
@@ -31,11 +31,23 @@ float longReload;
 int magazineSize;
 int totalAmmo;
 
+////////////////////////////////////
+//Explosive weapon stats, optional//
+////////////////////////////////////
+
+bool isExplosive = false;
+float maxSplashDamage;
+float maxSplashRange;
+
+float minSplashDamage;
+float minSplashRange;
+
 ///////////////////
 //Calculated data//
 ///////////////////
 
 float damageAtRange;	//damage with falloff calculation
+float splashDamage;		//splash damage dealt
 float idealDPS;			//ideal DPS, assuming 100% accuracy and falloff calculation
 float DPS;				//DPS, assuming user-input accuracy and falloff calculation
 float TTK;				//Time to Kill, assuming the target has default 1000 health
@@ -44,10 +56,11 @@ float nanoweaveTTK;		//Time To Kill, assuming the target has default 1000 health
 
 
 //Calculations
-void calculate(int, float);	//range and accuracy arguments
+void calculate(int, float, float);	//range and accuracy arguments
 void calcIdealDPS();//no arguments
-void calcDPS(float);	//accuracy argument, nested into calculate
+void calcDPS(float, float);	//accuracy argument, nested into calculate
 void calcTTK();	//time to kill, assuming that the target has 1000 hp, which is the default
+void calcSplash(float);
 
 
 public:
@@ -59,6 +72,12 @@ public:
 	bool saveToFile(string);	//accepts file name as input, file name should be weapon name
 
 	//Mutators
+	void setExplosive(bool);
+	void setMaxSplashDamage(float);
+	void setMinSplashDamage(float);
+	void setMaxSplashRange(float);
+	void setMinSplashRange(float);
+
 	void setWeaponType(string);
 	void setWeaponName(string);
 	void setFireRate(int);
@@ -76,6 +95,13 @@ public:
 
 	//Accessors
 	void display();
+	void displayMore();
+
+	bool getExplosive();
+	float getMaxSplashDamage();
+	float getMinSplashDamage();
+	float getMaxSplashRange();
+	float getMinSplashRange();
 
 	string getWeaponType();
 	string getWeaponName();

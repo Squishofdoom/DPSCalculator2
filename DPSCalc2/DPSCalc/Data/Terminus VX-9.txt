@@ -1,4 +1,4 @@
-Infantry
+infantry
 Terminus VX-9
 769
 580
@@ -12,3 +12,7 @@ Terminus VX-9
 2.65
 30
 210
+0
+0
+0
+0

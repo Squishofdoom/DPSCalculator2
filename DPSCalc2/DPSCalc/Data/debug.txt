@@ -1,4 +1,4 @@
-Infantry
+infantry
 Debug
 769
 580
@@ -12,3 +12,7 @@ Debug
 2.65
 30
 210
+100
+1
+1
+10

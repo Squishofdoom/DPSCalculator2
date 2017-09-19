@@ -1,4 +1,4 @@
-Infantry
+infantry
 Pulsar VS-1
 698
 2
@@ -12,3 +12,7 @@ Pulsar VS-1
 2.2
 30
 180
+0
+0
+0
+0

@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 #include "Weapon.h"
-#include "Explosive.h"
 
 Weapon weapon;
 
@@ -59,6 +59,7 @@ void import() {
 
 	cin.ignore();
 	getline(cin, fileName);
+	transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
 
 	fileName += ".txt";
 
@@ -78,11 +79,23 @@ void manualInput() {
 
 	cout << "Please input the following data: " << endl;
 
+
+	cout << "Does the weapon have splash damage, y/n?" << endl;
+	cin >> temp;
+
+	if (temp == "y" || temp == "Y") {
+
+		weapon.setExplosive(true);
+	}
+	else {
+		weapon.setExplosive(false);
+	}
 	//weapon name
 	bool val = false;
 	do {
 		cout << "Weapon name: ";
 		getline(cin, weaponName);
+		transform(weaponName.begin(), weaponName.end(), weaponName.begin(), ::tolower);
 		cout << endl;
 
 		val = weapon.check(weaponName);
@@ -246,6 +259,67 @@ void manualInput() {
 
 	weapon.setTotalAmmo(temp2);
 
+	//if weapon has splash damage
+	if (weapon.getExplosive()) {
+
+		//max splash damage
+		val = false;
+		do {
+			cout << "Maximum splash damage: ";
+			cin >> temp2;
+			cout << endl;
+
+			val = weapon.check(temp2);
+
+		} while (val == false);
+
+		weapon.setMaxSplashDamage(temp2);
+
+		val = false;
+		do {
+			cout << "Splash falloff start: ";
+			cin >> temp3;
+			cout << endl;
+
+			val = weapon.check(temp3);
+
+		} while (val == false);
+
+		weapon.setMaxSplashRange(temp3);
+
+		val = false;
+		do {
+			cout << "Minimum splash damage: ";
+			cin >> temp3;
+			cout << endl;
+
+			val = weapon.check(temp3);
+
+		} while (val == false);
+
+		weapon.setMinSplashDamage(temp3);
+
+		val = false;
+		do {
+			cout << "Splash falloff end: ";
+			cin >> temp3;
+			cout << endl;
+
+			val = weapon.check(temp3);
+
+		} while (val == false);
+
+		weapon.setMinSplashRange(temp3);
+	}
+
+	else {
+		weapon.setMaxSplashDamage(0);
+		weapon.setMaxSplashRange(0);
+		weapon.setMinSplashDamage(0);
+		weapon.setMinSplashRange(0);
+
+	}
+
 
 		cout << "Weapon type(\"infantry\" for infantry and non-planetside weapons: ";
 		cin >> temp;
@@ -253,11 +327,12 @@ void manualInput() {
 
 		if (temp == "infantry" || "Infantry") {
 
-			weapon.setWeaponType("Infantry");
+			weapon.setWeaponType("infantry");
 		}
 
 		else {
 
+			transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 			weapon.setWeaponType(temp);
 
 		}

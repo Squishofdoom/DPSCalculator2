@@ -54,16 +54,29 @@ void menu() {
 void import() {
 	
 	string fileName;
-
-	cout << "Please input the file name. File name should be the same as the weapon's name." << endl;
+	bool val = false;
 
 	cin.ignore();
-	getline(cin, fileName);
-	transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
 
-	fileName += ".txt";
+	while (val == false) {
+		cout << "Please input the file name. File name should be the same as the weapon's name." << endl;
 
-	weapon.setFromFile(fileName);
+		
+		getline(cin, fileName);
+		transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
+
+		fileName += ".txt";
+
+		if (weapon.setFromFile(fileName) == false) {
+
+			val = false;
+			cout << "File could not open. You may be attempting to open a file that does not exist." << endl;
+			cout << "Please try again." << endl;
+		
+		}
+		else val = true;
+
+	}
 
 	weapon.display();
 }

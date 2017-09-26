@@ -17,6 +17,11 @@ bool Weapon::setFromFile(string fileName){
 
 	file.open(fileName);
 
+	if (!file.is_open()) {
+
+		return false;
+	}
+
 	/* Debug console output
 
 	while (file >> temp) {
@@ -174,7 +179,7 @@ void Weapon::display() {
 	int accuracy;
 	int range;
 	float headshots;
-	float miss;
+	float miss = 0;
 
 	cout << "Input Y if you would like to view the base weapon statistics, or N if you would only like to view calculated statistics." << endl;
 	cin >> input;

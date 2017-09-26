@@ -52,6 +52,8 @@ float idealDPS;			//ideal DPS, assuming 100% accuracy and falloff calculation
 float DPS;				//DPS, assuming user-input accuracy and falloff calculation
 float TTK;				//Time to Kill, assuming the target has default 1000 health
 float nanoweaveTTK;		//Time To Kill, assuming the target has default 1000 health and 20% damage reduction
+float BTK;				//Bullets to Kill
+float nanoweaveBTK;		//Bullets to Kill, assuming 20% damage reduction
 
 
 

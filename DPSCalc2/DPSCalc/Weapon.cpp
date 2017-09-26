@@ -153,6 +153,12 @@ void Weapon::calcTTK() {
 
 	TTK = 1000 / DPS;
 	nanoweaveTTK = 1000 / nanoweaveDPS;
+
+	BTK = 1000 / damageAtRange;
+	nanoweaveBTK = 1000 / (damageAtRange - (damageAtRange * .20));
+
+	BTK = ceil(BTK);
+	nanoweaveBTK = ceil(nanoweaveBTK);
 }
 
 void Weapon::calcSplash(float miss) {
@@ -175,9 +181,10 @@ void Weapon::calcSplash(float miss) {
 
 void Weapon::display() {
 
+	bool val = false;
 	string input;
 	int accuracy;
-	int range;
+	int range = 0;
 	float headshots;
 	float miss = 0;
 
@@ -190,20 +197,65 @@ void Weapon::display() {
 	}
 
 	if (isExplosive) {
+		val = false;
+		while (val == false) {
+			cout << "How far from your target did your weapon hit? 0 for direct hit: ";
+			cin >> miss;
+			cout << endl;
 
-		cout << "How far from your target did your weapon hit? 0 for direct hit: ";
-		cin >> miss;
-		cout << endl;
+			if (miss >= 0) {
+				val = true;
+			}
+
+			else {
+				cout << "That input is not valid. Please input a number greater than 0." << endl;
+			}
+		}
 	}
 	
-	cout << "Please input average accuracy, in percentage." << endl;
-	cin >> accuracy;
+	val = false;
+	while (val == false) {
+		cout << "Please input average accuracy, in percentage." << endl;
+		cin >> accuracy;
 
-	cout << "Please input range from target, in meters." << endl;
-	cin >> range;
+		if (accuracy >= 0 && accuracy <= 100) {
 
-	cout << "Please input headshot rate, in percentage: ";
-	cin >> headshots; cout << endl;
+			val = true;
+		}
+		else {
+
+			cout << "That input is not valid. Please input a number between 0 and 100." << endl;
+		}
+	}
+
+	val = false;
+	while (val == false) {
+		cout << "Please input range from target, in meters." << endl;
+		cin >> range;
+
+		if (range >= 0) {
+			val = true;
+		}
+
+		else {
+			cout << "That input is not valid. Please input a number greater than 0." << endl;
+		}
+	}
+
+	val = false;
+	while (val == false) {
+		cout << "Please input headshot rate, in percentage: ";
+		cin >> headshots; cout << endl;
+
+		if (headshots >= 0 && headshots <= 100) {
+
+			val = true;
+		}
+		else {
+
+			cout << "That input is not valid. Please input a number between 0 and 100." << endl;
+		}
+	}
 
 	calculate(range, accuracy, headshots);
 	calcSplash(miss);
@@ -213,6 +265,8 @@ void Weapon::display() {
 	cout << "Actual DPS, accounting for accuracy, and headshots, is " << DPS << endl;
 	cout << "Time To Kill: " << TTK << " seconds." << endl;
 	cout << "TTK against Nanoweave: " << nanoweaveTTK << " seconds." << endl;
+	cout << "Bullets to Kill: " << BTK << " rounds. " << endl;
+	cout << "BTK against Nanoweave: " << nanoweaveBTK << " rounds." << endl;
 	if (isExplosive) {
 		cout << "Splash damage dealt: " << splashDamage << ", " << miss << " meters from the target." << endl;
 	}
